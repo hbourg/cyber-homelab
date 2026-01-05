@@ -57,16 +57,16 @@ The environment is built and maintained as a continuous learning platform to pra
 
 - Logical Network Segemntation
 
--
-                     pfSense
-        ┌──────────────┼────────────────┐
-        │               │                │
-     VLAN 10          VLAN 20         Management
-   User LAN        Server LAN       Proxmox Host
-  192.168.10.0/24 192.168.20.0/24   192.168.99.0/24
-        │               │
-   Windows VM       Linux VM
-   Client Test      Server Test
+                          pfSense
+            ┌─────────────────┼─────────────────┐
+            │                 │                 │
+         VLAN 10            VLAN 20          Management
+        User LAN          Server LAN        Proxmox Host
+      192.168.10.0/24   192.168.20.0/24    192.168.99.0/24
+            │                 │
+      Windows VM          Linux VM
+      Client Test         Server Test
+
 
 
 - Virtualization and Bridging (Proxmox)
