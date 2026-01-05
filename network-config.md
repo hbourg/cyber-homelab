@@ -1,4 +1,4 @@
-VLAN 10 – User LAN
-Subnet: 192.168.10.0/24
-Gateway: 192.168.10.1
-DHCP Range: 192.168.10.100–192.168.10.200
+- VLAN 10 – User LAN
+- Subnet: 192.168.10.0/24
+- Gateway: 192.168.10.1
+- DHCP Range: 192.168.10.100–192.168.10.200
