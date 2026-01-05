@@ -25,7 +25,6 @@ The environment is built and maintained as a continuous learning platform to pra
 - **pfSense** – Firewall, router, NAT, and DHCP services
 - **Linux & Windows VMs** – Endpoint and server simulation
 - **VLANs** – Network segmentation and isolation
-- **Wireshark** – Packet capture and traffic analysis
 - **Managed switch & access point** – Physical networking integration
 
 ---
