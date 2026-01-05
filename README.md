@@ -34,7 +34,9 @@ The environment is built and maintained as a continuous learning platform to pra
 - DHCP centrally managed via pfSense
 - Firewall rules enforcing least-privilege traffic flow
 
-            Internet
+- High-Architecture
+
+           Internet
                |
          [ ISP / Modem ]
                |
@@ -51,6 +53,35 @@ The environment is built and maintained as a continuous learning platform to pra
            |          |
         VLAN 10    VLAN 20
         Clients    Servers
+
+
+- Logical Network Segemntation
+
+-
+                     pfSense
+        ┌──────────────┼────────────────┐
+        │               │                │
+     VLAN 10          VLAN 20         Management
+   User LAN        Server LAN       Proxmox Host
+  192.168.10.0/24 192.168.20.0/24   192.168.99.0/24
+        │               │
+   Windows VM       Linux VM
+   Client Test      Server Test
+
+
+- Virtualization and Bridging (Proxmox)
+  
+           Physical NICs
+        ┌────────┬────────┐
+        │  NIC0  │  NIC1  │
+        │  WAN   │  LAN   │
+        └────┬───┴───┬────┘
+             │       │
+          vmbr0    vmbr1
+          (WAN)    (VLAN-aware)
+             │       │
+          pfSense   Internal VMs
+                    VLAN 10 / 20
 
 
 ---
