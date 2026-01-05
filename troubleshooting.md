@@ -9,7 +9,6 @@
 ### Investigation
 - Verified VLAN tagging on Proxmox bridge
 - Confirmed DHCP service running on pfSense
-- Captured DHCP discovery packets using Wireshark
 
 ### Resolution
 - Corrected VLAN tag on VM network interface
