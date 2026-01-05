@@ -34,7 +34,24 @@ The environment is built and maintained as a continuous learning platform to pra
 - DHCP centrally managed via pfSense
 - Firewall rules enforcing least-privilege traffic flow
 
-*(Network diagrams and screenshots available in repository folders)*
+            Internet
+               |
+         [ ISP / Modem ]
+               |
+            (WAN)
+           pfSense
+        Firewall / Router
+               |
+            (LAN Trunk)
+               |
+        ┌─────────────────┐
+        │     Proxmox     │
+        │ Virtualization  │
+        └─────────────────┘
+           |          |
+        VLAN 10    VLAN 20
+        Clients    Servers
+
 
 ---
 
