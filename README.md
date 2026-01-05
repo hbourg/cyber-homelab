@@ -37,54 +37,17 @@ The environment is built and maintained as a continuous learning platform to pra
 - DHCP centrally managed via pfSense
 - Firewall rules enforcing least-privilege traffic flow
 
-- High-Architecture
-
-           Internet
-               |
-         [ ISP / Modem ]
-               |
-            (WAN)
-           pfSense
-        Firewall / Router
-               |
-            (LAN Trunk)
-               |
-        ┌─────────────────┐
-        │     Proxmox     │
-        │ Virtualization  │
-        └─────────────────┘
-           |          |
-        VLAN 10    VLAN 20
-        Clients    Servers
+### High-Level Architecture
+![High-Level Architecture](diagrams/high-level-architecture.png)
 
 
-- Logical Network Segemntation
-
-                          pfSense
-            ┌─────────────────┼─────────────────┐
-            │                 │                 │
-         VLAN 10            VLAN 20          Management
-        User LAN          Server LAN        Proxmox Host
-      192.168.10.0/24   192.168.20.0/24    192.168.99.0/24
-            │                 │
-      Windows VM          Linux VM
-      Client Test         Server Test
+### Logical Network Segmentation
+![Logical Network Segmentation](diagrams/logical-network-segmentation.png)
 
 
+### Virtualization & Bridging (Proxmox)
+![Virtualization & Bridging](diagrams/proxmox-bridging.png)
 
-- Virtualization and Bridging (Proxmox)
-  
-           Physical NICs
-        ┌────────┬────────┐
-        │  NIC0  │  NIC1  │
-        │  WAN   │  LAN   │
-        └────┬───┴───┬────┘
-             │       │
-          vmbr0    vmbr1
-          (WAN)    (VLAN-aware)
-             │       │
-          pfSense   Internal VMs
-                    VLAN 10 / 20
 
 
 ---
@@ -121,13 +84,12 @@ This lab emphasizes **defensive security concepts**, including:
 
 ---
 
-## Documentation
-This repository includes:
-- Network diagrams
-- Configuration notes
-- Firewall rule explanations
-- Troubleshooting walkthroughs
-- Lessons learned and future improvements
+## Evidence / Documentation
+- Firewall rules: [firewall-rules.md](firewall-rules.md)
+- Network config: [network-config.md](network-config.md)
+- Troubleshooting playbooks: [troubleshooting.md](troubleshooting.md)
+- Security+ mapping: [securityplus-mapping.md](securityplus-mapping.md)
+- Roadmap: [roadmap.md](roadmap.md)
 
 ---
 
