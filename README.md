@@ -1,5 +1,8 @@
 # Cybersecurity & Networking Homelab
 
+> **TL;DR:** Virtualized enterprise-style network using Proxmox and pfSense with VLAN segmentation, default-deny firewall policy, and documented troubleshooting scenarios.
+
+
 ## Overview
 This project is a personal cybersecurity homelab designed to simulate a small-scale enterprise network environment. The lab focuses on **network segmentation, firewall configuration, virtualization, and traffic analysis**, using industry-standard tools to develop hands-on defensive security and system administration skills.
 
