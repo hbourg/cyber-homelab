@@ -1,108 +1,108 @@
 # Cybersecurity & Networking Homelab
 
-> **TL;DR:** Virtualized enterprise-style network using Proxmox and pfSense with VLAN segmentation, default-deny firewall policy, and documented troubleshooting scenarios.
+> **TL;DR:** Virtualized homelab simulating small-enterprise networking and security using Proxmox, pfSense, Pi-hole, and Tailscale. Focused on firewall policy design, DNS enforcement, zero-trust remote access, and real-world troubleshooting.
 
+---
 
 ## Overview
-This project is a personal cybersecurity homelab designed to simulate a small-scale enterprise network environment. The lab focuses on **network segmentation, firewall configuration, virtualization, and traffic analysis**, using industry-standard tools to develop hands-on defensive security and system administration skills.
+This repository documents a personal cybersecurity homelab built to simulate a **small enterprise network environment**. The project focuses on **network security fundamentals**, including firewall configuration, DNS-based threat mitigation, secure remote access, and virtualization.
 
-The environment is built and maintained as a continuous learning platform to practice **real-world troubleshooting, network security controls, and documentation**.
+Rather than exposing services to the public internet, the lab emphasizes a **defensive, least-privilege design** with centralized control, visibility, and documentation. The environment is continuously iterated on as a learning platform for hands-on cybersecurity and system administration practice.
 
 ---
 
 ## Objectives
-- Design a segmented virtual network resembling an enterprise layout
-- Implement firewall rules and traffic control using pfSense
-- Gain hands-on experience with virtualization and network bridging
-- Practice troubleshooting connectivity, routing, and DNS issues
-- Analyze network traffic and logs for security visibility
-- Document architecture and configurations clearly and professionally
+- Design and operate a stateful firewall and router using pfSense
+- Virtualize network infrastructure using Proxmox VE
+- Enforce network-wide DNS filtering and visibility with Pi-hole
+- Enable secure remote access using a zero-trust VPN model
+- Practice real-world troubleshooting across Layers 2–4
+- Document architecture, decisions, and lessons learned professionally
 
 ---
 
 ## Technologies Used
-- **Proxmox VE** – Virtualization platform for hosting isolated virtual machines
-- **pfSense** – Firewall, router, NAT, and DHCP services
-- **Linux & Windows VMs** – Endpoint and server simulation
-- **VLANs** – Network segmentation and isolation
-- **Managed switch & access point** – Physical networking integration
+- **Proxmox VE** – Virtualization platform hosting firewall and service VMs  
+- **pfSense** – Firewall, routing, NAT, and DHCP  
+- **Pi-hole** – Network-wide DNS filtering and query logging  
+- **Tailscale** – Zero-trust remote access VPN (WireGuard-based)  
+- **Linux VMs** – Server and infrastructure services  
+- **Netgear RAX9** – Wireless access point (AP mode)
 
 ---
 
 ## Network Architecture
-- Dedicated **WAN and LAN interfaces** routed through pfSense
-- **VLAN-segmented networks** to isolate services and clients
-- Virtual NICs bridged through Proxmox
-- DHCP centrally managed via pfSense
-- Firewall rules enforcing least-privilege traffic flow
+- Dedicated **WAN and LAN interfaces** routed through pfSense  
+- pfSense virtualized inside Proxmox using bridged interfaces  
+- Centralized DHCP and DNS control via pfSense and Pi-hole  
+- Wireless access point operating in **AP mode**, not router mode  
+- Secure remote access via Tailscale with **no inbound WAN ports exposed**
 
 ### High-Level Architecture
 ![High-Level Architecture](diagrams/high-level-architecture.png)
 
-
-### Logical Network Segmentation
+### Logical Network Layout
 ![Logical Network Segmentation](diagrams/logical-network-segmentation.png)
 
-
-### Virtualization & Bridging (Proxmox)
-![Virtualization & Bridging](diagrams/proxmox-bridging.png)
-
-
+### Proxmox Virtualization & Bridging
+![Proxmox Bridging](diagrams/proxmox-bridging.png)
 
 ---
 
 ## Key Features & Skills Demonstrated
-- Firewall rule creation and validation
-- NAT configuration and interface assignment
-- VLAN tagging and isolation
-- DHCP configuration and IP management
-- Virtual machine deployment and networking
-- Troubleshooting Layer 2–4 connectivity issues
-- Traffic inspection and packet analysis
-- Operating in restricted / limited-connectivity environments
-- Technical documentation and change tracking
+- Stateful firewall rule creation and validation
+- NAT and interface assignment in pfSense
+- DHCP and DNS enforcement across the network
+- Secure remote access using a zero-trust VPN model
+- Virtual machine networking and bridge configuration
+- Troubleshooting DHCP, routing, DNS, and authentication issues
+- Understanding consumer AP behavior in enterprise-style designs
+- Clear technical documentation and change tracking
 
 ---
 
 ## Troubleshooting Scenarios Practiced
-- VM unable to obtain DHCP lease
-- VLAN misconfiguration causing traffic isolation
-- Incorrect firewall rules blocking internal traffic
-- DNS resolution failures across network segments
-- Bridged interface issues between Proxmox and pfSense
-- Wireless access point connectivity problems
+- Clients receiving APIPA addresses due to bridge misconfiguration
+- DNS resolution failures traced to upstream routing issues
+- Firewall rules unintentionally blocking internal services
+- Proxmox authentication failures caused by realm mismatch
+- Wireless connectivity issues caused by incorrect AP wiring
+- VPN access failures related to NAT and service exposure
 
 ---
 
 ## Security Focus
-This lab emphasizes **defensive security concepts**, including:
-- Network segmentation to reduce attack surface
-- Controlled east-west traffic via firewall rules
-- Visibility into network activity through logging and packet capture
-- Secure configuration of routing and services
+This lab emphasizes **defensive security principles**, including:
+- Default-deny firewall posture
+- Minimizing attack surface by avoiding WAN-exposed services
+- Network-wide DNS enforcement and visibility
+- Zero-trust remote access using identity-based VPN
+- Separation of management and user access paths
 
 ---
 
-## Evidence / Documentation
-- Firewall rules: [firewall-rules.md](firewall-rules.md)
-- Network config: [network-config.md](network-config.md)
-- Troubleshooting playbooks: [troubleshooting.md](troubleshooting.md)
-- Security+ mapping: [securityplus-mapping.md](securityplus-mapping.md)
-- Roadmap: [roadmap.md](roadmap.md)
+## Documentation & Evidence
+- **Firewall rules:** `firewall/firewall-rules.md`  
+- **Network configuration:** `networking/network-config.md`  
+- **Implementation notes:** `IMPLEMENTATION_NOTES.md`  
+- **Remote access design:** `remote-access.md`  
+- **Troubleshooting lessons:** `troubleshooting/lessons-learned.md`  
+- **Security+ mapping:** `securityplus-mapping.md`  
+- **Roadmap:** `roadmap.md`  
 
 ---
 
 ## Future Enhancements
-- IDS/IPS integration (Suricata or Snort)
+- VLAN segmentation (Trusted / Servers / IoT / Guest)
+- IDS/IPS integration (Suricata)
 - Centralized logging and monitoring
-- Vulnerable VM deployment for detection practice
-- SIEM-style log analysis
-- Automated backups and configuration versioning
+- SIEM-style alerting and correlation
+- Configuration backups and versioning
 
 ---
 
 ## Purpose
-This homelab is maintained to support career development in **Cybersecurity, SOC Analysis, and System Administration**, complementing formal education and industry certifications such as **CompTIA Security+** and the **Google Cybersecurity Certificate**.
+This homelab is maintained to support career development in **Cybersecurity, SOC Analysis, and System Administration**. It complements formal coursework and certifications by providing hands-on experience with real infrastructure, real failures, and real fixes.
 
 ---
 
@@ -110,3 +110,4 @@ This homelab is maintained to support career development in **Cybersecurity, SOC
 **Harrison Bourg**  
 Cybersecurity Graduate  
 GitHub: https://github.com/hpbourg
+
