@@ -82,13 +82,12 @@ This lab emphasizes **defensive security principles**, including:
 ---
 
 ## Documentation & Evidence
-- **Firewall rules:** `firewall/firewall-rules.md`  
-- **Network configuration:** `networking/network-config.md`  
-- **Implementation notes:** `IMPLEMENTATION_NOTES.md`  
-- **Remote access design:** `remote-access.md`  
-- **Troubleshooting lessons:** `troubleshooting/lessons-learned.md`  
-- **Security+ mapping:** `securityplus-mapping.md`  
-- **Roadmap:** `roadmap.md`  
+- **Firewall rules:** [firewall/firewall-rules.md](firewall/firewall-rules.md)
+- **Network configuration:** [networking/network-config.md](networking/network-config.md)
+- **Remote access design:** [remote-access.md](remote-access.md)
+- **Troubleshooting lessons:** [troubleshooting/lessons-learned.md](troubleshooting/lessons-learned.md)
+- **Security+ mapping:** [securityplus-mapping.md](securityplus-mapping.md)
+- **Roadmap:** [roadmap.md](roadmap.md) 
 
 ---
 
