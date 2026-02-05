@@ -87,7 +87,8 @@ This lab emphasizes **defensive security principles**, including:
 - **Remote access design:** [remote-access.md](remote-access.md)
 - **Troubleshooting lessons:** [troubleshooting/lessons-learned.md](troubleshooting/lessons-learned.md)
 - **Security+ mapping:** [securityplus-mapping.md](securityplus-mapping.md)
-- **Roadmap:** [roadmap.md](roadmap.md) 
+- **Roadmap:** [roadmap.md](roadmap.md)
+- **Implementation Notes:** [implementation_notes.md](implementation_notes.md) 
 
 ---
 
