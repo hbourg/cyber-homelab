@@ -1,11 +1,11 @@
 # Cybersecurity & Networking Homelab
 
-> **TL;DR:** Virtualized homelab simulating small-enterprise networking and security using Proxmox, pfSense, Pi-hole, and Tailscale. Focused on firewall policy design, DNS enforcement, zero-trust remote access, and real-world troubleshooting.
+> **TL;DR:** Virtualized homelab simulating small-enterprise networking and security using Proxmox, pfSense, Pi-hole, Tailscale, and Plex. Focused on firewall policy design, VLAN segmentation, DNS enforcement, zero-trust remote access, storage redundancy, and real-world troubleshooting.
 
 ---
 
 ## Overview
-This repository documents a personal cybersecurity homelab built to simulate a **small enterprise network environment**. The project focuses on **network security fundamentals**, including firewall configuration, DNS-based threat mitigation, secure remote access, and virtualization.
+This repository documents a personal cybersecurity homelab built to simulate a **small enterprise network environment**. The project focuses on **network security fundamentals**, including firewall configuration, VLAN segmentation, DNS-based threat mitigation, secure remote access, and virtualization.
 
 Rather than exposing services to the public internet, the lab emphasizes a **defensive, least-privilege design** with centralized control, visibility, and documentation. The environment is continuously iterated on as a learning platform for hands-on cybersecurity and system administration practice.
 
@@ -16,27 +16,34 @@ Rather than exposing services to the public internet, the lab emphasizes a **def
 - Virtualize network infrastructure using Proxmox VE
 - Enforce network-wide DNS filtering and visibility with Pi-hole
 - Enable secure remote access using a zero-trust VPN model
+- Implement VLAN segmentation to isolate network traffic by function
+- Deploy and manage self-hosted media services (Plex) in a segmented environment
+- Configure storage redundancy using ZFS mirroring
 - Practice real-world troubleshooting across Layers 2–4
 - Document architecture, decisions, and lessons learned professionally
 
 ---
 
 ## Technologies Used
-- **Proxmox VE** – Virtualization platform hosting firewall and service VMs  
-- **pfSense** – Firewall, routing, NAT, and DHCP  
-- **Pi-hole** – Network-wide DNS filtering and query logging  
-- **Tailscale** – Zero-trust remote access VPN (WireGuard-based)  
-- **Linux VMs** – Server and infrastructure services  
+- **Proxmox VE** – Virtualization platform hosting firewall, service VMs, and LXC containers
+- **pfSense** – Firewall, routing, NAT, DHCP, and VLAN management
+- **Pi-hole** – Network-wide DNS filtering and query logging
+- **Tailscale** – Zero-trust remote access VPN (WireGuard-based) with subnet routing
+- **Plex Media Server** – Self-hosted media streaming deployed as an LXC container
+- **ZFS** – Storage redundancy via mirrored 1TB drives
+- **Linux LXC Containers** – Lightweight containerized service deployment
 - **Netgear RAX9** – Wireless access point (AP mode)
 
 ---
 
 ## Network Architecture
-- Dedicated **WAN and LAN interfaces** routed through pfSense  
-- pfSense virtualized inside Proxmox using bridged interfaces  
-- Centralized DHCP and DNS control via pfSense and Pi-hole  
-- Wireless access point operating in **AP mode**, not router mode  
+- Dedicated **WAN and LAN interfaces** routed through pfSense
+- pfSense virtualized inside Proxmox using bridged interfaces
+- **VLAN segmentation** isolating User, Server, and Management traffic
+- Centralized DHCP and DNS control via pfSense and Pi-hole
+- Wireless access point operating in **AP mode**, not router mode
 - Secure remote access via Tailscale with **no inbound WAN ports exposed**
+- Tailscale **subnet routing** advertising internal VLANs for full remote access
 
 ### High-Level Architecture
 ![High-Level Architecture](diagrams/high-level-architecture.png)
@@ -49,11 +56,42 @@ Rather than exposing services to the public internet, the lab emphasizes a **def
 
 ---
 
+## Storage Architecture
+
+| Pool | Type | Drives | Usage |
+|------|------|--------|-------|
+| `media-mirro` | ZFS Mirror | 2x 1TB HDD (ST1000DM003) | Plex config, metadata, databases |
+| `media-storage` | Directory (ext4) | 1x 4TB HDD (WD40EMRX) | Media library (movies, TV shows) |
+| `local-lvm` | LVM | 525GB SSD (Crucial CT525MX300) | Proxmox OS, VMs, LXC containers |
+
+ZFS mirroring provides drive-failure redundancy with automatic checksumming and snapshot support. Media files are stored separately on the 4TB drive, keeping replaceable content separate from critical configuration data.
+
+---
+
+## Services Deployed
+
+### Plex Media Server (LXC Container)
+- **IP:** 192.168.20.54 (static, VLAN 20)
+- **Storage:** Config on ZFS mirror, media library on 4TB drive at `/mnt/media`
+- **Remote Access:** Accessible via Tailscale subnet routing, no WAN ports exposed
+- **Libraries:** Movies (`/mnt/media/movies`), TV Shows (`/mnt/media/shows`)
+
+### Pi-hole (VM)
+- Network-wide DNS filtering and ad blocking
+- DNS queries routed through Pi-hole for all VLANs
+- Accessible remotely via Tailscale with DNS override enabled in Tailscale admin panel
+
+---
+
 ## Key Features & Skills Demonstrated
 - Stateful firewall rule creation and validation
+- VLAN design and inter-VLAN traffic enforcement
 - NAT and interface assignment in pfSense
 - DHCP and DNS enforcement across the network
+- ZFS storage configuration and redundancy planning
+- LXC container deployment and network configuration
 - Secure remote access using a zero-trust VPN model
+- Tailscale subnet routing for full remote network access
 - Virtual machine networking and bridge configuration
 - Troubleshooting DHCP, routing, DNS, and authentication issues
 - Understanding consumer AP behavior in enterprise-style designs
@@ -68,36 +106,41 @@ Rather than exposing services to the public internet, the lab emphasizes a **def
 - Proxmox authentication failures caused by realm mismatch
 - Wireless connectivity issues caused by incorrect AP wiring
 - VPN access failures related to NAT and service exposure
+- **LXC VLAN connectivity failure caused by Proxmox firewall bridge (fwbr) dropping tagged frames**
+- **pfSense VLAN interface misconfiguration (upstream gateway set incorrectly on LAN-side interface)**
+- **Tailscale daemon failing in LXC due to missing TUN device**
 
 ---
 
 ## Security Focus
 This lab emphasizes **defensive security principles**, including:
 - Default-deny firewall posture
+- VLAN segmentation to limit lateral movement between network zones
 - Minimizing attack surface by avoiding WAN-exposed services
 - Network-wide DNS enforcement and visibility
 - Zero-trust remote access using identity-based VPN
 - Separation of management and user access paths
+- pfSense as sole firewall enforcement point for VLAN-segmented containers
 
 ---
 
 ## Documentation & Evidence
-- **Firewall rules:** [firewall/firewall-rules.md](firewall/firewall-rules.md)
-- **Network configuration:** [networking/network-config.md](networking/network-config.md)
-- **Remote access design:** [remote-access.md](remote-access.md)
-- **Troubleshooting lessons:** [troubleshooting/lessons-learned.md](troubleshooting/lessons-learned.md)
+- **Firewall rules:** [firewall-rules.md](firewall-rules.md)
+- **Network configuration:** [network-config.md](network-config.md)
 - **Security+ mapping:** [securityplus-mapping.md](securityplus-mapping.md)
 - **Roadmap:** [roadmap.md](roadmap.md)
-- **Implementation Notes:** [implementation_notes.md](implementation_notes.md) 
+- **Implementation Notes:** [implementation_notes.md](implementation_notes.md)
+- **Scenarios:** [scenarios/](scenarios/)
 
 ---
 
 ## Future Enhancements
-- VLAN segmentation (Trusted / Servers / IoT / Guest)
-- IDS/IPS integration (Suricata)
-- Centralized logging and monitoring
-- SIEM-style alerting and correlation
-- Configuration backups and versioning
+- IDS/IPS integration (Suricata on pfSense)
+- Centralized logging and SIEM (Wazuh)
+- Vulnerable VM lab for attack/detect practice
+- Honeypot deployment (OpenCanary)
+- Automated configuration backups to GitHub
+- Additional VLAN segments (IoT, Guest)
 
 ---
 
@@ -107,7 +150,6 @@ This homelab is maintained to support career development in **Cybersecurity, SOC
 ---
 
 ## Author
-**Harrison Bourg**  
-Cybersecurity Graduate  
+**Harrison Bourg**
+Cybersecurity Graduate
 GitHub: https://github.com/hpbourg
-
