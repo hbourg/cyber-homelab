@@ -1,11 +1,13 @@
 # Cybersecurity & Networking Homelab
 
-> **TL;DR:** Virtualized homelab simulating small-enterprise networking and security using Proxmox, pfSense, Pi-hole, Tailscale, and Plex. Focused on firewall policy design, VLAN segmentation, DNS enforcement, zero-trust remote access, storage redundancy, and real-world troubleshooting.
+> ⚡ Actively maintained — last updated March 2026
+
+> **TL;DR:** Virtualized homelab simulating small-enterprise networking and security using Proxmox, pfSense, Suricata, Pi-hole, Tailscale, and Plex. Focused on firewall policy design, VLAN segmentation, intrusion detection, DNS enforcement, zero-trust remote access, storage redundancy, and real-world troubleshooting.
 
 ---
 
 ## Overview
-This repository documents a personal cybersecurity homelab built to simulate a **small enterprise network environment**. The project focuses on **network security fundamentals**, including firewall configuration, VLAN segmentation, DNS-based threat mitigation, secure remote access, and virtualization.
+This repository documents a personal cybersecurity homelab built to simulate a **small enterprise network environment**. The project focuses on **network security fundamentals**, including firewall configuration, VLAN segmentation, intrusion detection, DNS-based threat mitigation, secure remote access, and virtualization.
 
 Rather than exposing services to the public internet, the lab emphasizes a **defensive, least-privilege design** with centralized control, visibility, and documentation. The environment is continuously iterated on as a learning platform for hands-on cybersecurity and system administration practice.
 
@@ -17,6 +19,7 @@ Rather than exposing services to the public internet, the lab emphasizes a **def
 - Enforce network-wide DNS filtering and visibility with Pi-hole
 - Enable secure remote access using a zero-trust VPN model
 - Implement VLAN segmentation to isolate network traffic by function
+- Deploy and tune a network intrusion detection system (Suricata)
 - Deploy and manage self-hosted media services (Plex) in a segmented environment
 - Configure storage redundancy using ZFS mirroring
 - Practice real-world troubleshooting across Layers 2–4
@@ -27,6 +30,7 @@ Rather than exposing services to the public internet, the lab emphasizes a **def
 ## Technologies Used
 - **Proxmox VE** – Virtualization platform hosting firewall, service VMs, and LXC containers
 - **pfSense** – Firewall, routing, NAT, DHCP, and VLAN management
+- **Suricata** – Network intrusion detection system (IDS) monitoring WAN and LAN interfaces
 - **Pi-hole** – Network-wide DNS filtering and query logging
 - **Tailscale** – Zero-trust remote access VPN (WireGuard-based) with subnet routing
 - **Plex Media Server** – Self-hosted media streaming deployed as an LXC container
@@ -70,6 +74,14 @@ ZFS mirroring provides drive-failure redundancy with automatic checksumming and 
 
 ## Services Deployed
 
+### Suricata IDS (pfSense Package)
+- Network intrusion detection running directly on pfSense
+- Monitoring both **WAN** and **LAN** interfaces
+- Rulesets enabled: ETOpen Emerging Threats, Snort GPLv2 Community Rules, Feodo Tracker Botnet C2, ABUSE.ch SSL Blacklist
+- Rules updated automatically every 12 hours
+- Running in IDS mode (detect only) for alert tuning before enabling blocking
+- First alert investigated and tuned: DHCP truncated options false positive from ISP gateway suppressed
+
 ### Plex Media Server (LXC Container)
 - **IP:** 192.168.20.54 (static, VLAN 20)
 - **Storage:** Config on ZFS mirror, media library on 4TB drive at `/mnt/media`
@@ -88,6 +100,8 @@ ZFS mirroring provides drive-failure redundancy with automatic checksumming and 
 - VLAN design and inter-VLAN traffic enforcement
 - NAT and interface assignment in pfSense
 - DHCP and DNS enforcement across the network
+- Network intrusion detection deployment and alert tuning (Suricata)
+- False positive identification and suppression
 - ZFS storage configuration and redundancy planning
 - LXC container deployment and network configuration
 - Secure remote access using a zero-trust VPN model
@@ -109,6 +123,7 @@ ZFS mirroring provides drive-failure redundancy with automatic checksumming and 
 - **LXC VLAN connectivity failure caused by Proxmox firewall bridge (fwbr) dropping tagged frames**
 - **pfSense VLAN interface misconfiguration (upstream gateway set incorrectly on LAN-side interface)**
 - **Tailscale daemon failing in LXC due to missing TUN device**
+- **Suricata false positive tuning — DHCP truncated options alert from ISP gateway suppressed**
 
 ---
 
@@ -118,6 +133,7 @@ This lab emphasizes **defensive security principles**, including:
 - VLAN segmentation to limit lateral movement between network zones
 - Minimizing attack surface by avoiding WAN-exposed services
 - Network-wide DNS enforcement and visibility
+- Intrusion detection across WAN and LAN with multi-ruleset coverage
 - Zero-trust remote access using identity-based VPN
 - Separation of management and user access paths
 - pfSense as sole firewall enforcement point for VLAN-segmented containers
@@ -135,12 +151,12 @@ This lab emphasizes **defensive security principles**, including:
 ---
 
 ## Future Enhancements
-- IDS/IPS integration (Suricata on pfSense)
 - Centralized logging and SIEM (Wazuh)
-- Vulnerable VM lab for attack/detect practice
+- Vulnerable VM lab for attack/detect practice (Metasploitable, DVWA)
 - Honeypot deployment (OpenCanary)
 - Automated configuration backups to GitHub
 - Additional VLAN segments (IoT, Guest)
+- Promote Suricata to IPS mode after alert tuning is complete
 
 ---
 
